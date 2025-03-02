@@ -1,6 +1,9 @@
 xcode-cmake-build/**
 conan/**
 .vs/**
+out/**
+
 conanfile.txt
 CMakeUserPresets.json
+
 .clang-format
