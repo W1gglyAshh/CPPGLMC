@@ -3,7 +3,9 @@ cmake_minimum_required(VERSION 3.20)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_PREFIX_PATH "E:/library/glfw-3.4.WIN64/" ${CMAKE_PREFIX_PATH}
+if (WIN32)
+    set(CMAKE_PREFIX_PATH "E:/library/glfw-3.4.WIN64/" ${CMAKE_PREFIX_PATH}
+endif()
 
 project(Game)
 
