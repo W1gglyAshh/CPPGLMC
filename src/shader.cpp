@@ -40,7 +40,7 @@ Shader::Shader(std::string frag_path, std::string vert_path)
 Shader::~Shader()
 {
     glDeleteProgram(id);
-    log("Shader program freed.");
+    std::cout << "Shader program freed." << std::endl;
 }
 
 void Shader::compile()

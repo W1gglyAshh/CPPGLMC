@@ -40,6 +40,9 @@
 #include <objc/objc-runtime.h>
 #endif
 
+#define GAME_VERSION_MAJOR 0
+#define GAME_VERSION_MINOR 1
+
 extern std::fstream log_file;
 
 void initGLFW();

@@ -3,15 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-if (WIN32)
-    set(CMAKE_PREFIX_PATH "E:/library/glfw-3.4.WIN64/" ${CMAKE_PREFIX_PATH}
-endif()
-
 project(Game)
-
-find_package(OpenGL REQUIRED)
-find_package(GLFW3 3.3 REQUIRED)
-find_package(glm REQUIRED)
 
 add_executable(Game 
     src/main.cpp
@@ -33,11 +25,32 @@ add_executable(Game
 )
 
 add_library(glad STATIC src/glad.c)
+find_package(OpenGL REQUIRED)
 
 include_directories(include)
-target_link_libraries(Game PRIVATE OpenGL::GL glm::glm glfw glad)
+
+if (WIN32)
+    # Windows VS2022 configuration
+    set(GLFW_INCLUDE_DIR "E:/library/glfw-3.4.bin.WIN64/include")
+    set(GLFW_LIBRARY_DIR "E:/library/glfw-3.4.bin.WIN64/lib-vc2022")
+    
+    # full path to the GLFW library
+    set(GLFW_LIBRARY "${GLFW_LIBRARY_DIR}/glfw3.lib")
+    
+    # verify the library exists
+    if(NOT EXISTS ${GLFW_LIBRARY})
+        message(FATAL_ERROR "GLFW library not found at: ${GLFW_LIBRARY}")
+    endif()
+    
+    include_directories(${GLFW_INCLUDE_DIR})
+    
+    # link with the full path to the library
+    target_link_libraries(Game PRIVATE ${GLFW_LIBRARY})
+endif()
 
 if (APPLE)
+    find_package(GLFW3 3.3 REQUIRED)
+
     # clang-tidy for macOS
     set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*,-clang-analyzer-alpha.*,-llvm-*")
 
@@ -46,8 +59,11 @@ if (APPLE)
     if (NOT COCOA_LIBRARY)
         message(FATAL_ERROR "Cocoa library not found")
     endif()
-    target_link_libraries(Game PRIVATE ${COCOA_LIBRARY})
+
+    target_link_libraries(Game PRIVATE ${COCOA_LIBRARY} glfw)
 endif()
+
+target_link_libraries(Game PRIVATE OpenGL::GL glad)
 
 # make shader files visible in Xcode and VS2022
 set(SHADER_FILES

@@ -7,13 +7,8 @@
 #include "window.h"
 #include "game.h"
 
-#define GAME_VERSION_MAJOR 0
-#define GAME_VERSION_MINOR 1
-
 int main(int argc, char *argv[])
 {
-    // call endLog() after the destructors are called
-    atexit(endLog());
     startLog();
     
     // initialization
@@ -26,5 +21,6 @@ int main(int argc, char *argv[])
     
     game(window);
 
+    endLog();
     return 0;
 }

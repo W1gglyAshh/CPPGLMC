@@ -92,9 +92,9 @@ Window::Window(std::string title_in, int width_in, int height_in, bool resizable
 
 Window::~Window()
 {
-    log("Destroying window...");
+    std::cout << "Destroying window..." << std::endl;
     glfwDestroyWindow(window);
-    log("Window destroyed successfully!");
+    std::cout << "Window destroyed successfully!" << std::endl;
 }
 
 void Window::setTitle(std::string title_in)
