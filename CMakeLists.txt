@@ -1,9 +1,15 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*,-clang-analyzer-alpha.*,-llvm-*")
+
+if (WIN32)
+    # link conan library in Windows
+    cmake_policy(SET CMP0091 NEW) 
+    include(${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
+endif()
 
 project(Game)
 
