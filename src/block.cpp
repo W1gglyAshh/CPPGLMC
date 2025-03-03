@@ -303,17 +303,21 @@ void Block::loadTexture()
     glBindTexture(GL_TEXTURE_2D, texture);
     if (glGetError() != GL_NO_ERROR) log("Failed to bind texture! Error code: " + std::to_string(glGetError()));
     
-    log("Succeeded binding. Loading texture...");
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     
+    log("Succeeded binding. Loading texture from " + texture_path);
+    
     int w, h, nr_channel;
-    unsigned char *data = stbi_load(texture_path.c_str(), &w, &h, &nr_channel, 0);
+    const char *t_path_cstr = const_cast<char*>(texture_path.c_str());
+    unsigned char *data = stbi_load(t_path_cstr, &w, &h, &nr_channel, 0);
     
     if (data)
     {
+        log("Loaded. Processing...");
+        
         GLenum format = GL_RGB;
         switch (nr_channel) {
             case 1: format = GL_RED; break;
@@ -348,7 +352,7 @@ void Block::updateInstanceData()
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), static_cast<void*>(nullptr));
     glEnableVertexAttribArray(2);
     // instanced
-    glVertexAttribDivisor(1, 2);
+    glVertexAttribDivisor(2, 1);
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);

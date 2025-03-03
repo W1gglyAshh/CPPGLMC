@@ -36,7 +36,7 @@ class Camera
     glm::mat4 getViewMatrix() const { return glm::lookAt(position, position + front, up); }
     glm::mat4 getProjectionMatrix(float aspect_ratio) const { return glm::perspective(glm::radians(fov), aspect_ratio, 0.1f, 100.0f); }
     
-    void processKeyboardInput(GLFWwindow *&window, float delta_time);
+    void processKeyboardInput(GLFWwindow *window, float delta_time);
     void processMouseInput(float x, float y);
     
     void setMovementSpeed(float speed);
@@ -47,4 +47,5 @@ class Camera
     glm::vec3 getFront() const { return front; }
     glm::vec3 getUp() const { return up; }
     glm::vec3 getRight() const { return right; }
+    float getFOV() const { return fov; }
 };

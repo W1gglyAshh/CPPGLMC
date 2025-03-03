@@ -50,7 +50,7 @@ endif()
 
 if (APPLE)
     # set path to local GLFW library
-    set(GLFW_LIBRARY "${CMAKE_SOURCE_DIR}/libs/libglfw.3.4.dylib")
+    set(GLFW_LIBRARY "${CMAKE_SOURCE_DIR}/libs/libglfw.3.dylib")
     
     # link required libraries
     find_library(COCOA_LIBRARY Cocoa REQUIRED)

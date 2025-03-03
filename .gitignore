@@ -2,6 +2,7 @@ xcode-cmake-build/**
 build/**
 .vs/**
 out/**
+.idea/**
 
 conanfile.txt
 CMakeUserPresets.json

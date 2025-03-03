@@ -17,7 +17,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 direction)
     updateCameraVectors();
 }
 
-void Camera::processKeyboardInput(GLFWwindow *&window, float delta_time)
+void Camera::processKeyboardInput(GLFWwindow *window, float delta_time)
 {
     float velocity = movement_speed * delta_time;
     

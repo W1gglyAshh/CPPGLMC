@@ -29,6 +29,23 @@ class Window
     GLFWwindow *getWindow() const { return window; }
     std::string getTitle() const { return title; }
     glm::ivec2 getSize() const { return glm::ivec2(width, height); }
+    int getWidth() const
+    {
+        if (width <= 0)
+        {
+            if (is_fullscreen) return glfwGetVideoMode(glfwGetPrimaryMonitor())->width;
+            return 1920;
+        }
+        return width;
+    }
+    int getHeight() const {
+        if (height <= 0)
+        {
+            if (is_fullscreen) return glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
+            return 1080;
+        }
+        return height;
+    }
 
     void updateViewport();
     static void frameRateLimiter(double target_fps);
