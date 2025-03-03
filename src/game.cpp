@@ -10,10 +10,10 @@
 
 void game(std::unique_ptr<Window> &window)
 {
-    Shader shader("../../shaders/shader.frag", "../../shaders/shader.vert");
+    Shader shader("../shaders/shader.frag", "../shaders/shader.vert");
     shader.compile();
 
-    Block block(BlockType::GRASS, "../../res/atlas.png");
+    Block block(BlockType::GRASS, "../res/atlas.png");
 
     std::vector<glm::vec3> positions;
     for (int x = 0; x < 10; x++)

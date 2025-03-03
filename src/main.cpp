@@ -3,9 +3,9 @@
 // created by Gabriel LU on Feb 28, 2025
 //
 
+#include "game.h"
 #include "include.h"
 #include "window.h"
-#include "game.h"
 
 int main(int argc, char *argv[])
 {

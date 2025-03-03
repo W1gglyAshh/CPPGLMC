@@ -20,7 +20,7 @@ add_executable(Game
     src/block.h
     src/camera.cpp
     src/camera.h
-    src/window.cpp
+    src/window.mm
     src/window.h
     src/player.cpp
     src/player.h
@@ -49,6 +49,8 @@ if (WIN32)
 endif()
 
 if (APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ObjC++")
+
     # set path to local GLFW library
     set(GLFW_LIBRARY "${CMAKE_SOURCE_DIR}/libs/libglfw.3.dylib")
     
