@@ -5,13 +5,15 @@
 
 #pragma once
 
-#include "include.h"
 #include "block.h"
-#include "shader.h"
 #include "camera.h"
+#include "include.h"
+#include "shader.h"
 
 class World
 {
-private:
-public:
+  private:
+    std::vector<std::unique_ptr<Camera>> cameras;
+
+  public:
 };

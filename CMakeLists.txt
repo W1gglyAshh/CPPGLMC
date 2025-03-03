@@ -22,6 +22,8 @@ add_executable(Game
     src/camera.h
     src/window.cpp
     src/window.h
+    src/player.cpp
+    src/player.h
 )
 
 add_library(glad STATIC src/glad.c)
