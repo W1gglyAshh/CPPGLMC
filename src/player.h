@@ -36,5 +36,5 @@ public:
     
     void update();
     
-    // TODO: add player collision
+    // TODO: add player collision (probably with bullet)
 };

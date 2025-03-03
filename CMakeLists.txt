@@ -49,43 +49,12 @@ if (WIN32)
 endif()
 
 if (APPLE)
-    # GLFW library for macOS from local libs folder
+    # set path to local GLFW library
     set(GLFW_LIBRARY "${CMAKE_SOURCE_DIR}/libs/libglfw.3.4.dylib")
     
-    # verify the library exists
-    if(NOT EXISTS ${GLFW_LIBRARY})
-        message(FATAL_ERROR "GLFW library not found at: ${GLFW_LIBRARY}")
-    endif()
-    
-    # create a symbolic link for compatibility (or Xcode will not find the library)
-    add_custom_command(TARGET Game PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E create_symlink
-        ${CMAKE_SOURCE_DIR}/libs/libglfw.3.4.dylib
-        ${CMAKE_SOURCE_DIR}/libs/libglfw.3.dylib)
-    
-    # add both files to the copy command
-    add_custom_command(TARGET Game POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${GLFW_LIBRARY} $<TARGET_FILE_DIR:Game>
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_SOURCE_DIR}/libs/libglfw.3.dylib $<TARGET_FILE_DIR:Game>)
-    
-    # set install name path for the dylib
-    set_target_properties(Game PROPERTIES
-        INSTALL_RPATH "@executable_path"
-        BUILD_WITH_INSTALL_RPATH TRUE)
-    
-    # link all required macOS frameworks
+    # link required libraries
     find_library(COCOA_LIBRARY Cocoa REQUIRED)
-    find_library(IOKIT_LIBRARY IOKit REQUIRED)
-    find_library(COREVIDEO_LIBRARY CoreVideo REQUIRED)
-    
-    target_link_libraries(Game PRIVATE 
-        ${GLFW_LIBRARY}
-        ${COCOA_LIBRARY}
-        ${IOKIT_LIBRARY}
-        ${COREVIDEO_LIBRARY}
-        "-framework OpenGL")
+    target_link_libraries(Game PRIVATE ${COCOA_LIBRARY} ${GLFW_LIBRARY})
 endif()
 
 target_link_libraries(Game PRIVATE OpenGL::GL glad)
