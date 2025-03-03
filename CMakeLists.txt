@@ -45,24 +45,47 @@ if (WIN32)
     endif()
     
     include_directories(${GLFW_INCLUDE_DIR})
-    
-    # link with the full path to the library
     target_link_libraries(Game PRIVATE ${GLFW_LIBRARY})
 endif()
 
 if (APPLE)
-    find_package(GLFW3 3.3 REQUIRED)
-
-    # clang-tidy for macOS
-    set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*,-clang-analyzer-alpha.*,-llvm-*")
-
-    # link Cocoa library on macOS to ensure GLFW fullscreen support
-    find_library(COCOA_LIBRARY Cocoa)
-    if (NOT COCOA_LIBRARY)
-        message(FATAL_ERROR "Cocoa library not found")
+    # GLFW library for macOS from local libs folder
+    set(GLFW_LIBRARY "${CMAKE_SOURCE_DIR}/libs/libglfw.3.4.dylib")
+    
+    # verify the library exists
+    if(NOT EXISTS ${GLFW_LIBRARY})
+        message(FATAL_ERROR "GLFW library not found at: ${GLFW_LIBRARY}")
     endif()
-
-    target_link_libraries(Game PRIVATE ${COCOA_LIBRARY} glfw)
+    
+    # create a symbolic link for compatibility (or Xcode will not find the library)
+    add_custom_command(TARGET Game PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+        ${CMAKE_SOURCE_DIR}/libs/libglfw.3.4.dylib
+        ${CMAKE_SOURCE_DIR}/libs/libglfw.3.dylib)
+    
+    # add both files to the copy command
+    add_custom_command(TARGET Game POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${GLFW_LIBRARY} $<TARGET_FILE_DIR:Game>
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_SOURCE_DIR}/libs/libglfw.3.dylib $<TARGET_FILE_DIR:Game>)
+    
+    # set install name path for the dylib
+    set_target_properties(Game PROPERTIES
+        INSTALL_RPATH "@executable_path"
+        BUILD_WITH_INSTALL_RPATH TRUE)
+    
+    # link all required macOS frameworks
+    find_library(COCOA_LIBRARY Cocoa REQUIRED)
+    find_library(IOKIT_LIBRARY IOKit REQUIRED)
+    find_library(COREVIDEO_LIBRARY CoreVideo REQUIRED)
+    
+    target_link_libraries(Game PRIVATE 
+        ${GLFW_LIBRARY}
+        ${COCOA_LIBRARY}
+        ${IOKIT_LIBRARY}
+        ${COREVIDEO_LIBRARY}
+        "-framework OpenGL")
 endif()
 
 target_link_libraries(Game PRIVATE OpenGL::GL glad)
@@ -74,3 +97,4 @@ set(SHADER_FILES
 )
 source_group("Shaders" FILES ${SHADER_FILES})
 add_custom_target(Shaders SOURCES ${SHADER_FILES})
+

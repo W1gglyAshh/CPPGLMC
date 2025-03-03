@@ -8,13 +8,22 @@
 
 class Player {
 private:
-    PlayerPrivilegs pp;
+    PlayerPrivileges pp;
     std::unique_ptr<Camera> camera;
     
     glm::vec3 player_position;
     
     unsigned int player_ID;
     std::string player_name;
+    
+    enum class PlayerState: int
+    {
+        STANDING = 0,
+        WALKING,
+        RUNNING,
+        CROUCHING,
+        JUMPING
+    };
 public:
     Player(unsigned int ID, PlayerPrivileges pp_in);
     ~Player() = default;
@@ -24,6 +33,8 @@ public:
     
     void setFirstPerson();
     void setThirdPerson();
+    
+    void update();
     
     // TODO: add player collision
 };
